@@ -1,2 +1,107 @@
 # LinkedList
 
+## 链表的类型
+
+链表的入口节点称为链表的头结点也就是head。
+
+### 单链表
+
+![image-20240829145923372](https://gitee.com/OooAlex/study_note/raw/master/img/202408291459545.png)
+
+### 双链表
+
+![image-20240829145956936](https://gitee.com/OooAlex/study_note/raw/master/img/202408291459969.png)
+
+### 循环链表
+
+![image-20240829150017974](https://gitee.com/OooAlex/study_note/raw/master/img/202408291500022.png)
+
+
+
+## 链表的定义
+
+### 链表节点
+
+```
+// 单链表
+struct ListNode {
+    int val;  // 节点上存储的元素
+    ListNode *next;  // 指向下一个节点的指针
+    ListNode(int x) : val(x), next(NULL) {}  // 节点的构造函数
+};
+```
+
+如果不定义构造函数，则不能在初始化时给变量赋值。
+
+
+
+## Leetcode203.移除链表元素
+
+### 题目
+
+![image-20240829163119224](https://gitee.com/OooAlex/study_note/raw/master/img/202408291631305.png)
+
+### 我的解法
+
+```
+// Definition for singly-linked list.
+struct ListNode
+{
+    int val;
+    ListNode *next;
+    ListNode() : val(0), next(nullptr) {}
+    ListNode(int x) : val(x), next(nullptr) {}
+    ListNode(int x, ListNode *next) : val(x), next(next) {}
+};
+
+class Solution
+{
+public:
+    ListNode *removeElements(ListNode *head, int val)
+    {
+        ListNode *sentinel = new ListNode(0, head);
+        ListNode *new_head = nullptr;
+        bool newHeadExist = false;
+        while (sentinel->next != nullptr)
+        {
+            if (sentinel->next->val == val)
+            {
+                sentinel->next = sentinel->next->next;
+                continue;
+            }
+            else if (!newHeadExist)
+            {
+                new_head = sentinel->next;
+                newHeadExist = true;
+            }
+            sentinel = sentinel->next;
+        }
+        return new_head;
+    }
+};
+```
+
+### FAQ
+
+#### 为什么要用sentinel节点？
+
+> 使用sentinel->next遍历链表，方便以统一格式删除链表中的节点，删除头节点不用特意处理
+
+#### 为什么删除节点后要continue循环，而不执行sentinel = sentinel->next?
+
+> 在删除节点时已经执行sentinel->next = sentinel->next->next迭代了
+
+#### 为什么要使用bool newHeadExist?
+
+> 在确定好头节点后，需要保存下来作为返回值
+
+#### 其他注意点？
+
+> 永远记住当前处理的节点是sentinel->next
+
+### 总结
+
+Leetcode easy题，用好sentinel节点遍历链表就可以秒杀
+
+
+
