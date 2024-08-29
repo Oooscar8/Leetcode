@@ -29,3 +29,15 @@ public:
         return i - 1;
     }
 };
+
+int main() {
+    Solution s1;
+    vector<int> citations1 = {3,0,6,1,5};
+    cout << s1.hIndex(citations1) << endl; // 输出：3
+
+    Solution s2;
+    vector<int> citations2 = {1,3,1};
+    cout << s2.hIndex(citations2) << endl; // 输出：1
+
+    return 0;
+}

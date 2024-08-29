@@ -1,6 +1,12 @@
 // timeSeries=[1 2 3 7 11 15]
 // duration=3
 
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <functional>
+using namespace std;
+
 class Solution
 {
 public:
