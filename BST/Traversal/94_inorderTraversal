@@ -1,4 +1,5 @@
 #include <vector>;
+#include <stack>;
 using namespace std;
 
 // Definition for a binary tree node.
@@ -31,5 +32,29 @@ private:
         inorderTraversalHelper(cur->left, result);
         result.push_back(cur->val);
         inorderTraversalHelper(cur->right, result);
+    }
+};
+
+// Using iteration.
+class Solution2
+{
+public:
+    vector<int> inorderTraversal(TreeNode *root)
+    {
+        stack<TreeNode*> st;
+        vector<int> result;
+        TreeNode* cur = root;
+        while (cur != NULL || !st.empty()) {
+            if (cur != NULL) {
+                st.push(cur);
+                cur = cur->left;
+            }
+            else {
+                result.push_back(st.top()->val);
+                cur = st.top()->right;
+                st.pop();
+            }
+        }
+        return result;
     }
 };

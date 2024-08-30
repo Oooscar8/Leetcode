@@ -1,4 +1,6 @@
 #include <vector>;
+#include <stack>;
+#include <algorithm>;
 using namespace std;
 
 // Definition for a binary tree node.
@@ -31,5 +33,31 @@ private:
         postorderTraversalHelper(cur->left, result);
         postorderTraversalHelper(cur->right, result);
         result.push_back(cur->val);
+    }
+};
+
+// Using iteration.
+class Solution2
+{
+public:
+    vector<int> postorderTraversal(TreeNode *root)
+    {
+        stack<TreeNode *> st;
+        vector<int> result;
+        if (root == NULL)
+            return result;
+        st.push(root);
+        while (!st.empty())
+        {
+            TreeNode *node = st.top();
+            result.push_back(node->val);
+            st.pop();
+            if (node->left)
+                st.push(node->left);
+            if (node->right)
+                st.push(node->right);
+        }
+        reverse(result.begin(), result.end());
+        return result;
     }
 };

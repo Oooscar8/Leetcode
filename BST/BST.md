@@ -225,3 +225,106 @@ private:
 
 
 
+## 迭代遍历二叉树
+
+### 可行性
+
+> 递归的本质就是用栈空间保存每一次调用函数的参数、局部变量和返回地址，因此也可以直接用栈实现二叉树的前中后序遍历
+
+### 前序遍历
+
+思路：
+
+1. 根节点先入栈。中间节点先出栈，后右孩子入栈，再左孩子入栈，然后重复出栈过程…
+
+2. 空节点不入栈
+
+```
+class Solution {
+public:
+    vector<int> preorderTraversal(TreeNode* root) {
+        stack<TreeNode*> st;
+        vector<int> result;
+        if (root == NULL) return result;
+        st.push(root);
+        while (!st.empty()) {
+            // 中
+            TreeNode* node = st.top();   
+            st.pop();
+            result.push_back(node->val);
+            // 右（空节点不入栈）
+            if (node->right) st.push(node->right);
+            // 左（空节点不入栈）
+            if (node->left) st.push(node->left);            
+        }
+        return result;
+    }
+};
+```
+
+### 中序遍历
+
+为什么与前序遍历写法逻辑不一样？
+
+> 中序遍历先访问中间节点，但是先处理左孩子，因此**处理顺序和访问顺序不一致**
+
+思路：
+
+> **先使用指针遍历到要处理的节点（最左侧）**，然后出栈，处理右侧节点
+
+```
+class Solution {
+public:
+    vector<int> inorderTraversal(TreeNode* root) {
+        vector<int> result;
+        stack<TreeNode*> st;
+        TreeNode* cur = root;
+        while (cur != NULL || !st.empty()) {
+            if (cur != NULL) { // 指针来访问节点，访问到最底层
+                st.push(cur); // 将访问的节点放进栈
+                cur = cur->left;                // 左
+            } else {
+                cur = st.top(); // 从栈里弹出的数据，就是要处理的数据（放进result数组里的数据）
+                st.pop();
+                result.push_back(cur->val);     // 中
+                cur = cur->right;               // 右
+            }
+        }
+        return result;
+    }
+};
+```
+
+### 后序遍历
+
+思路：
+
+> 前序遍历是中左右，调整一下前序遍历代码顺序变成中右左，再reverse result数组，就是左右中，也就是后序遍历
+
+![image-20240830160449287](https://gitee.com/OooAlex/study_note/raw/master/img/202408301604479.png)
+
+```
+class Solution {
+public:
+    vector<int> postorderTraversal(TreeNode* root) {
+        stack<TreeNode*> st;
+        vector<int> result;
+        if (root == NULL) return result;
+        st.push(root);
+        while (!st.empty()) {
+            TreeNode* node = st.top();
+            st.pop();
+            result.push_back(node->val);
+            if (node->left) st.push(node->left); // 相对于前序遍历，这更改一下入栈顺序 （空节点不入栈）
+            if (node->right) st.push(node->right); // 空节点不入栈
+        }
+        reverse(result.begin(), result.end()); // 将结果反转之后就是左右中的顺序了
+        return result;
+    }
+};
+```
+
+### Leetcode144、94、145 — 前中后序遍历迭代实现
+
+详见上文，此处略过。
+
