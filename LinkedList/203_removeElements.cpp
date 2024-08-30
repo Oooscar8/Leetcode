@@ -16,25 +16,21 @@ class Solution
 public:
     ListNode *removeElements(ListNode *head, int val)
     {
-        ListNode *sentinel = new ListNode(0, head);
-        ListNode *new_head = nullptr;
-        bool newHeadExist = false;
+        ListNode *dummyHead = new ListNode(0, head);
+        ListNode *sentinel = dummyHead;
         while (sentinel->next != nullptr)
         {
             if (sentinel->next->val == val)
             {
-                free(sentinel->next);
+                ListNode* tmp = sentinel->next;
                 sentinel->next = sentinel->next->next;
+                delete tmp;
                 continue;
-            }
-            else if (!newHeadExist)
-            {
-                new_head = sentinel->next;
-                newHeadExist = true;
             }
             sentinel = sentinel->next;
         }
-        free(sentinel);
-        return new_head;
+        head = dummyHead->next;
+        delete dummyHead;
+        return head;
     }
 };

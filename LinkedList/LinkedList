@@ -81,6 +81,47 @@ public:
 };
 ```
 
+### 复杂度
+
+![image-20240829170540943](https://gitee.com/OooAlex/study_note/raw/master/img/202408291705985.png)
+
+- 时间复杂度: O(n)
+- 空间复杂度: O(1)
+
+### Better implementation
+
+手动释放内存空间
+
+使用dummyHead创建虚拟头节点，sentinel->next遍历链表，简洁优雅
+
+复杂度不变
+
+```
+class Solution
+{
+public:
+    ListNode *removeElements(ListNode *head, int val)
+    {
+        ListNode *dummyHead = new ListNode(0, head);
+        ListNode *sentinel = dummyHead;
+        while (sentinel->next != nullptr)
+        {
+            if (sentinel->next->val == val)
+            {
+                ListNode* tmp = sentinel->next;
+                sentinel->next = sentinel->next->next;
+                delete tmp;
+                continue;
+            }
+            sentinel = sentinel->next;
+        }
+        head = dummyHead->next;
+        delete dummyHead;
+        return head;
+    }
+};
+```
+
 ### FAQ
 
 #### 为什么要用sentinel节点？
@@ -91,13 +132,17 @@ public:
 
 > 在删除节点时已经执行sentinel->next = sentinel->next->next迭代了
 
-#### 为什么要使用bool newHeadExist?
+#### 为什么需要dummyHead和sentinel两个节点？
 
-> 在确定好头节点后，需要保存下来作为返回值
+> dummyHead为创建的虚拟头节点，dummyHead->next为新的头节点，sentinel为哨兵遍历链表
 
 #### 其他注意点？
 
 > 永远记住当前处理的节点是sentinel->next
+>
+> 手动释放内存空间！
+>
+> 释放指针就是释放指针指向的内存地址！
 
 ### 总结
 
