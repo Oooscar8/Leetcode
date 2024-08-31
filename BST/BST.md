@@ -1,3 +1,5 @@
+[TOC]
+
 # 二叉树
 
 ## 题目分类
@@ -124,7 +126,7 @@ void traversal(TreeNode* cur, vector<int>& vec) {
 
 
 
-## Leetcode144、94、145 — 前中后序遍历递归实现
+## Leetcode144 (easy)、94 (easy)、145 (easy) — 前中后序遍历递归实现
 
 直接放代码，与上文几乎一致。
 
@@ -328,3 +330,117 @@ public:
 
 详见上文，此处略过。
 
+
+
+## 二叉树的统一迭代法
+
+### 统一思路
+
+使用NULL标记已经访问过但还未处理的元素。也就是访问元素的同时将元素入栈，但是将要处理的元素用NULL标记。
+
+### 中序遍历
+
+思路：
+
+> 首先将中间节点弹出，避免后面加入右中左节点重复操作；
+>
+> 依次加入右中左节点，加入中间节点后加入NULL标记该节点已被访问但还未处理；
+>
+> 当栈顶是NULL时，处理NULL下面的节点。
+
+```
+class Solution {
+public:
+    vector<int> inorderTraversal(TreeNode* root) {
+        vector<int> result;
+        stack<TreeNode*> st;
+        if (root != NULL) st.push(root);
+        while (!st.empty()) {
+            TreeNode* node = st.top();
+            if (node != NULL) {
+                st.pop(); // 将该节点弹出，避免重复操作，下面再将右中左节点添加到栈中
+                if (node->right) st.push(node->right);  // 添加右节点（空节点不入栈）
+
+                st.push(node);                          // 添加中节点
+                st.push(NULL); // 中节点访问过，但是还没有处理，加入空节点做为标记。
+
+                if (node->left) st.push(node->left);    // 添加左节点（空节点不入栈）
+            } else { // 只有遇到空节点的时候，才将下一个节点放进结果集
+                st.pop();           // 将空节点弹出
+                node = st.top();    // 重新取出栈中元素
+                st.pop();
+                result.push_back(node->val); // 加入到结果集
+            }
+        }
+        return result;
+    }
+};
+```
+
+### 前序遍历
+
+仅需要改变右左中节点加入栈的顺序。
+
+```
+class Solution {
+public:
+    vector<int> preorderTraversal(TreeNode* root) {
+        vector<int> result;
+        stack<TreeNode*> st;
+        if (root != NULL) st.push(root);
+        while (!st.empty()) {
+            TreeNode* node = st.top();
+            if (node != NULL) {
+                st.pop();
+                if (node->right) st.push(node->right);  // 右
+                if (node->left) st.push(node->left);    // 左
+                st.push(node);                          // 中
+                st.push(NULL);
+            } else {
+                st.pop();
+                node = st.top();
+                st.pop();
+                result.push_back(node->val);
+            }
+        }
+        return result;
+    }
+};
+```
+
+### 后序遍历
+
+同理，节点加入栈的顺序变为中右左
+
+```
+class Solution {
+public:
+    vector<int> postorderTraversal(TreeNode* root) {
+        vector<int> result;
+        stack<TreeNode*> st;
+        if (root != NULL) st.push(root);
+        while (!st.empty()) {
+            TreeNode* node = st.top();
+            if (node != NULL) {
+                st.pop();
+                st.push(node);                          // 中
+                st.push(NULL);
+
+                if (node->right) st.push(node->right);  // 右
+                if (node->left) st.push(node->left);    // 左
+
+            } else {
+                st.pop();
+                node = st.top();
+                st.pop();
+                result.push_back(node->val);
+            }
+        }
+        return result;
+    }
+};
+```
+
+### 注意
+
+无论前中后序，都是中间节点入栈后加入NULL。因为中间节点都是已经访问但还未处理的节点。
