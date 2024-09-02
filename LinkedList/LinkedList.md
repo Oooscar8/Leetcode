@@ -35,7 +35,7 @@ struct ListNode {
 
 
 
-## Leetcode203.移除链表元素
+## Leetcode203 (easy).移除链表元素
 
 ### 题目
 
