@@ -43,6 +43,7 @@
         "streambuf": "cpp",
         "typeinfo": "cpp",
         "list": "cpp",
-        "94_inordertraversal": "cpp"
+        "94_inordertraversal": "cpp",
+        "17_lettercombinations": "cpp"
     }
 }
